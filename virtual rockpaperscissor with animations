@@ -1,0 +1,75 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+import random
+import time
+window = tk.Tk()
+window.title("Rock Paper Scissors")
+window.geometry("600x400")
+rock_img = paper_img = scissors_img = None
+bg_img = None
+
+def load_images():
+    global rock_img, paper_img, scissors_img, bg_img
+    rock_img = ImageTk.PhotoImage(Image.open(r"C:/Users/aniru/Desktop/codeforces/Projects/rock.png").resize((100, 100)))
+    paper_img = ImageTk.PhotoImage(Image.open(r"C:/Users/aniru/Desktop/codeforces/Projects/paper.png").resize((100, 100)))
+    scissors_img = ImageTk.PhotoImage(Image.open(r"C:/Users/aniru/Desktop/codeforces/Projects/scissors.png").resize((100, 100)))
+    bg_img = ImageTk.PhotoImage(Image.open(r"C:/Users/aniru/Desktop/codeforces/Projects/background.png").resize((600, 400)))
+
+def shuffle_animation():
+    choices = [rock_img, paper_img, scissors_img]
+    for _ in range(10):
+        computer_choice_label.config(image=random.choice(choices))
+        window.update()
+        time.sleep(0.1)
+def determine_winner(user_choice):
+    choices = ["Rock", "Paper", "Scissors"]
+    computer_choice = random.choice(choices)
+    shuffle_animation()
+    if computer_choice == "Rock":
+        computer_choice_label.config(image=rock_img)
+    elif computer_choice == "Paper":
+        computer_choice_label.config(image=paper_img)
+    else:
+        computer_choice_label.config(image=scissors_img)
+    if user_choice == computer_choice:
+        result_text = f"Draw! Both chose {user_choice}."
+    elif (user_choice == "Rock" and computer_choice == "Scissors") or \
+         (user_choice == "Paper" and computer_choice == "Rock") or \
+         (user_choice == "Scissors" and computer_choice == "Paper"):
+        result_text = f"You Win! {user_choice} beats {computer_choice}."
+    else:
+        result_text = f"You Lose! {computer_choice} beats {user_choice}."
+    
+    result_label.config(text=result_text)
+
+def choose_rock():
+    determine_winner("Rock")
+
+def choose_paper():
+    determine_winner("Paper")
+
+def choose_scissors():
+    determine_winner("Scissors")
+
+load_images()
+
+background_label = tk.Label(window, image=bg_img)
+background_label.place(relwidth=1, relheight=1)
+
+result_label = tk.Label(window, text="Make your choice!", font=("Comic Sans MS", 20), bg="#f0f0f0")
+result_label.pack(pady=20)
+
+computer_choice_label = tk.Label(window, image=None)
+computer_choice_label.pack(pady=20)
+button_frame = tk.Frame(window)
+button_frame.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+
+rock_button = tk.Button(button_frame, image=rock_img, command=choose_rock, borderwidth=0)
+rock_button.pack(side=tk.LEFT, padx=10)
+
+paper_button = tk.Button(button_frame, image=paper_img, command=choose_paper, borderwidth=0)
+paper_button.pack(side=tk.LEFT, padx=10)
+
+scissors_button = tk.Button(button_frame, image=scissors_img, command=choose_scissors, borderwidth=0)
+scissors_button.pack(side=tk.LEFT, padx=10)
+window.mainloop()
